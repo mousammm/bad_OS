@@ -68,21 +68,23 @@ hello:
 times 510 - ($ - $$) db 0
 dw 0xAA55
 
-bash:
-$ nasm -f bin boot.asm -o boot.bin
+> now u have created the bootloader, whih is in 16bit real mode
+> next u need is 32bit then 64bit that it 
+> and the best part their is a yt tut which cover all this
+> @screeck on yt (OS Development 101)
+> https://www.youtube.com/watch?v=E_n0VtGSZQY&list=PL2-MHfTy2uA2f46IN1-G8YToRzUMSUi52
 
-* BIOS loads 512 bytes from boot device to 0x7c00
-* BIOS checks last 2 bytes = 0x55AA (as a 16-bit word)
-* BIOS jumps to 0x7c00 (start of your code)
-* Your code clears screen (int 0x10, function 0x03)
-* Prints "hello world!" character by character
-* Infinite loop (no halt instruction shown, would typically hang or loop)
+> after completing this playlist which is about 1h u will build the kernal
+> good luck!!
 
+> a day in a c dev
 > learn x86 asm which is pretty easy !! (bad humour)
 > today was a more of a strugling day 
 > i was using dwm and qemu didnt work there 
 > half of the day went to figuring what to do
 > so i have to switch to hyprland and it worked idk how
 > moslty from now i think it will be asm 
-> so quickly learn asm x86 
-    (and why does assebly sound like some cement brand) ~mousamm
+> so quickly learn asm x86 (no good videos so u have to read /asm)
+
+    (and why does assembly sound like some cement brand) 
+                                                    ~mousamm

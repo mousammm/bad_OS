@@ -1,0 +1,30 @@
+boot_02.asm.more (more comments) old
+boot_02.asm.less (less comments) new 
+
+gdt
+// TODO
+explain boot_02
+
+protected mode 32bit
+- allows acces to upto 4gb of ram
+- introduces various protection mecanism
+    priviledge levels through a system know as rings 
+
+ring 3 (application)        // least priviledge
+ring 2 (device drivers)
+ring 1 (device drivers)
+ring 0 (kernal)             // most priviledge
+
+BIOS loads your code at 0x7C00
+Real mode setup with stack at 0x7C00
+GDT loaded and protected mode enabled
+Far jump to 32-bit protected mode code
+Segment registers initialized with flat memory model (0-4GB)
+Stack set up at 0x9C00 (0x2000 bytes above bootloader)
+A20 line enabled
+Infinite loop
+
+    GDT set up
+    Null descriptor at 0x00
+    Code segment at 0x08: Execute/Read, DPL=0, 32-bit, 4GB limit
+    Data segment at 0x10: Read/Write, DPL=0, 32-bit, 4GB limit

@@ -1,0 +1,126 @@
+bits 16                     ; We are in 16-bit real mode
+org 0x7c00                  ; BIOS loads bootloader at address 0x7c00
+
+; GDT Selectors - offsets from GDT start
+CODE_OFFSET equ 0x8         ; Code segment descriptor selector
+DATA_OFFSET equ 0x10        ; Data segment descriptor selector
+
+start:
+    ; Phase 1: Real Mode Setup
+    cli                     ; Disable interrupts during setup
+    xor ax, ax              ; Clear AX (faster than mov ax, 0)
+    mov ds, ax              ; Set Data Segment to 0
+    mov es, ax              ; Set Extra Segment to 0
+    mov ss, ax              ; Set Stack Segment to 0
+    mov sp, 0x7c00          ; Set Stack Pointer to 0x7c00 (grows downward)
+    sti                     ; Re-enable interrupts
+
+load_PM:
+    ; Phase 2: Prepare for Protected Mode
+    cli                     ; Disable interrupts while switching modes
+    lgdt [gdt_descriptor]   ; Load Global Descriptor Table Register
+    
+    ; Enable Protected Mode
+    mov eax, cr0            ; Get control register 0
+    or eax, 1               ; Set PE (Protection Enable) bit
+    mov cr0, eax            ; Write back to CR0
+    
+    ; Far jump to flush instruction pipeline and load CS with CODE_OFFSET
+    ; This forces CPU to use new segment descriptor from GDT
+    jmp CODE_OFFSET:PModeMain
+
+; #############################################################################
+; Global Descriptor Table (GDT)
+; Structure of each 8-byte descriptor:
+; Bytes 0-1: Segment Limit (bits 0-15)
+; Bytes 2-4: Base Address (bits 0-23)
+; Byte 5:    Access Byte
+; Byte 6:    Flags + Limit (bits 16-19)
+; Byte 7:    Base Address (bits 24-31)
+;
+; Access Byte Format (bit 7 to bit 0):
+; P(resent)   DPL(2)   S(ystem)   E(xecutable)   DC   RW   A(ccessed)
+; 1           00       1          1              0    1    0  = 10011010b (Code)
+; 1           00       1          0              0    1    0  = 10010010b (Data)
+;
+; Flags Byte Format (bit 7 to bit 0):
+; G(ranularity)   D/B     L     AVL     Segment Limit (bits 16-19)
+; 1               1       0     0       1111          = 11001111b
+; G=1: 4KB granularity (limit multiplied by 4KB)
+; D/B=1: 32-bit segment
+; L=0: Not 64-bit code segment
+; #############################################################################
+
+gdt_start:
+    ; Entry 0: Null Descriptor (Required)
+    dq 0x0                  ; 8 bytes of zeros
+    
+    ; Entry 1: Code Segment Descriptor (Selector 0x08)
+    dw 0xFFFF               ; Limit bits 0-15 (0xFFFF)
+    dw 0x0000               ; Base bits 0-15 (0x0000)
+    db 0x00                 ; Base bits 16-23 (0x00)
+    db 10011010b            ; Access: P=1, DPL=00, S=1, E=1, DC=0, RW=1, A=0
+    db 11001111b            ; Flags: G=1, D/B=1, L=0, AVL=0, Limit bits 16-19=1111
+    db 0x00                 ; Base bits 24-31 (0x00)
+    ; Effective: Base=0x00000000, Limit=0xFFFFF (with G=1: 4GB), 32-bit, Execute/Read
+    
+    ; Entry 2: Data Segment Descriptor (Selector 0x10)
+    dw 0xFFFF               ; Limit bits 0-15 (0xFFFF)
+    dw 0x0000               ; Base bits 0-15 (0x0000)
+    db 0x00                 ; Base bits 16-23 (0x00)
+    db 10010010b            ; Access: P=1, DPL=00, S=1, E=0, DC=0, RW=1, A=0
+    db 11001111b            ; Flags: G=1, D/B=1, L=0, AVL=0, Limit bits 16-19=1111
+    db 0x00                 ; Base bits 24-31 (0x00)
+    ; Effective: Base=0x00000000, Limit=0xFFFFF (with G=1: 4GB), 32-bit, Read/Write
+
+gdt_end:
+
+gdt_descriptor:
+    dw gdt_end - gdt_start - 1  ; GDT size in bytes minus 1 (limit)
+    dd gdt_start                ; Linear address of GDT start
+
+bits 32
+; #############################################################################
+; Protected Mode Entry Point
+; Now executing in 32-bit protected mode with flat memory model (0-4GB)
+; #############################################################################
+PModeMain:
+    ; Initialize all data segment registers with data segment selector
+    mov ax, DATA_OFFSET     ; Load data segment selector (0x10)
+    mov ds, ax              ; Data Segment
+    mov es, ax              ; Extra Segment
+    mov fs, ax              ; Extra Segment F
+    mov gs, ax              ; Extra Segment G
+    mov ss, ax              ; Stack Segment (same as data segment)
+    
+    ; Set up protected mode stack
+    mov ebp, 0x9C00         ; Set base pointer to 0x9C00
+    mov esp, ebp            ; Set stack pointer to same location
+    ; Stack: 0x9C00 down to lower addresses
+    ; Bootloader: 0x7C00-0x7DFF (512 bytes)
+    ; Stack distance: 0x9C00 - 0x7E00 = 0x1E00 bytes (7.5KB gap)
+    
+    ; Enable A20 Line - Required to access memory beyond 1MB
+    ; Fast A20 method using System Control Port A (0x92)
+    in al, 0x92             ; Read current value from port 0x92
+    or al, 2                ; Set bit 1 (A20 gate enable)
+    out 0x92, al            ; Write back to enable A20
+    ; Bit 1 = A20 gate, Bit 0 = Fast reset (must be 0)
+    
+    ; #########################################################################
+    ; At this point:
+    ; - CPU is in 32-bit protected mode
+    ; - Flat memory model: 0x00000000 to 0xFFFFFFFF accessible
+    ; - Code segment: 0x08 (execute/read, 0-4GB)
+    ; - Data/Stack segments: 0x10 (read/write, 0-4GB)
+    ; - A20 line enabled (can access memory >1MB)
+    ; - Stack ready at 0x9C00
+    ; - Ready for kernel loading or further initialization
+    ; #########################################################################
+    
+    ; Halt CPU (infinite loop - replace with kernel loader)
+    jmp $                   ; Jump to current address (infinite loop)
+
+; Bootloader Signature
+times 510 - ($ - $$) db 0   ; Pad remaining bytes with zeros
+dw 0xAA55                   ; Boot signature (bytes 511-512 = 0x55 0xAA)

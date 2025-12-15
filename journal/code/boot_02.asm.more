@@ -8,7 +8,7 @@ DATA_OFFSET equ 0x10        ; data segment descriptor in gdt start
 start:
     cli                     ; clear interrupts
     ; mov ax, 0x00            ; clear ax (xor ax, ax) more efficient
-    xor, ax, ax
+    xor ax, ax
     mov ds, ax
     mov es, ax
     mov ss, ax
@@ -91,6 +91,11 @@ PModeMain:
     in al, 0x92
     or al, 2
     out 0x92, al
+
+    mov edi, 0xB8000          ; video memory address
+    mov ah, 0x0F              ; white on black
+    mov al, 'P'               ; character to display
+    mov [edi], ax
 
     jmp $           ; infinite jump
     

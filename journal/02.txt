@@ -75,6 +75,7 @@ dw 0xAA55
 > https://www.youtube.com/watch?v=E_n0VtGSZQY&list=PL2-MHfTy2uA2f46IN1-G8YToRzUMSUi52
 
 > after completing this playlist which is about 1h u will build the kernal
+> if u want to see u can see the code folder i have explain with code
 > good luck!!
 
 > a day in a c dev

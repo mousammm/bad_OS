@@ -44,6 +44,11 @@ So whats the plan tough chouice??
 > ok so we are going to start from bootloader 
 > if ur wonder WHHY not BIOS cause its fitted in ur motherboard
 
+source: 
+- Nir Lichtman(yt:https://youtu.be/xFrMXzKCXIc?si=ofSwZ5ENWRlTT2ge)
+- video Title: Making Simple Bootloader using x86 Assembly
+- he explain this better than me 
+
 > boot.asm    
 bits 16             ; we are running in real mode
 org 0x7c00          ; bios loads code at this address

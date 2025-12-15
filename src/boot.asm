@@ -16,7 +16,7 @@ print:
     jne print 
 
 hello:
-    db "hello world!", 0
+    db "noktoki, bang bang", 0
 
 times 510 - ($ - $$) db 0
 dw 0xAA55

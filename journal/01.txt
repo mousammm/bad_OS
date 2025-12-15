@@ -45,7 +45,7 @@ Note* here its about addressable memory not installed ram
     x86
     RISC-V(64bit)
 
-- im going for 64 bit RISC-V for modern and biased reason
+- im going for 64 bit X86 for unknown and biased reason
 - next xv6
 
 end!

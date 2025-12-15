@@ -1,0 +1,276 @@
+A. Data Definition Mastery
+
+1. Byte/Word/Dword definitions
+   - db (Define Byte) - 8-bit
+   - dw (Define Word) - 16-bit  
+   - dd (Define Dword) - 32-bit
+   - dq (Define Qword) - 64-bit
+   - dt (Define Tenbytes) - 80-bit
+
+2. Arrays & Strings
+   - times directive
+   - Null-terminated strings
+   - Fixed-size buffers
+
+3. Constants & Equates
+   - equ vs = differences
+   - %define macros
+
+B. Memory Segments Deep Dive
+
+1. Section types & purposes
+   - .text (code), .data (initialized), .bss (uninitialized)
+   - .rodata (read-only), .comment, custom sections
+
+2. Memory addressing modes
+   - Direct: [variable]
+   - Indirect: [register]
+   - Indexed: [base + index*scale + displacement]
+
+PHASE 2: CORE INSTRUCTIONS (NEXT 2-3 WEEKS)
+A. Data Transfer Group
+
+1. MOV variations
+   - Register to register
+   - Immediate to register
+   - Memory to register (and reverse)
+   - Segment register moves
+
+2. Stack Operations  
+   - PUSH/POP (registers, memory, immediates)
+   - PUSHAD/POPAD (all registers)
+   - Stack frame: EBP/ESP usage
+
+3. Exchange & Conversion
+   - XCHG (swap)
+   - MOVZX/MOVSX (zero/sign extend)
+   - LEA (load effective address)
+
+B. Arithmetic & Logic
+
+1. Basic Arithmetic
+   - ADD/SUB/INC/DEC
+   - NEG (two's complement)
+
+2. Multiplication & Division
+   - MUL/IMUL (unsigned/signed multiply)
+   - DIV/IDIV (unsigned/signed divide)
+   - CBW/CWD/CDQ (extend for division)
+
+3. Bit Operations
+   - AND/OR/XOR/NOT
+   - TEST (AND without storing)
+   - SHL/SHR/SAL/SAR (shifts)
+   - ROL/ROR/RCL/RCR (rotates)
+
+C. Control Flow
+
+1. Unconditional Jumps
+   - JMP (near/far, direct/indirect)
+
+2. Conditional Jumps (after CMP/TEST)
+   - Equality: JE/JNE, JZ/JNZ
+   - Unsigned: JA/JAE/JB/JBE
+   - Signed: JG/JGE/JL/JLE
+   - Single flag: JC/JNC, JO/JNO, JS/JNS
+
+3. Loops
+   - LOOP/LOOPE/LOOPNE
+   - JCXZ/JECXZ
+
+PHASE 3: ADVANCED CONCEPTS (NEXT 3-4 WEEKS)
+A. Functions & Procedures
+
+1. CALL/RET mechanics
+   - Near vs Far calls
+   - Return with immediate
+
+2. Parameter Passing
+   - Register convention
+   - Stack convention (cdecl, stdcall, fastcall)
+   - Frame pointer (EBP) usage
+
+3. Local Variables
+   - Stack allocation
+   - ENTER/LEAVE instructions
+
+B. String Operations
+
+1. Basic String Instructions
+   - MOVS[B/W/D] (move string)
+   - CMPS[B/W/D] (compare string)
+   - SCAS[B/W/D] (scan string)
+   - STOS[B/W/D] (store string)
+   - LODS[B/W/D] (load string)
+
+2. Prefixes
+   - REP/REPE/REPNE
+   - Direction Flag (CLD/STD)
+
+C. System Programming
+
+1. Interrupts
+   - INT instruction
+   - Interrupt Vector Table (IVT)
+   - Writing interrupt handlers
+
+2. I/O Operations
+   - IN/OUT instructions
+   - Port addressing
+
+3. Privilege Levels
+   - Ring 0 vs Ring 3
+   - Segment protection
+
+PHASE 4: OS DEVELOPMENT SPECIFICS
+A. Processor Modes
+
+1. Real Mode (16-bit)
+   - Segment:Offset addressing
+   - BIOS interrupts (INT 10h, 13h, 16h)
+
+2. Protected Mode (32-bit)
+   - Global Descriptor Table (GDT)
+   - Interrupt Descriptor Table (IDT)
+   - Paging basics
+
+3. Long Mode (64-bit)
+   - New registers (R8-R15)
+   - RIP-relative addressing
+   - SYSCALL/SYSRET
+
+B. Boot Process
+
+1. Bootloader (Stage 1)
+   - MBR structure (512 bytes)
+   - BIOS Parameter Block (BPB)
+   - Loading sectors from disk
+
+2. Bootloader (Stage 2)
+   - Memory detection (INT 15h, E820)
+   - Loading kernel from filesystem
+   - Entering protected mode
+
+3. Kernel Initialization
+   - Setting up GDT/IDT
+   - Initializing paging
+   - Setting up kernel heap
+
+C. Kernel Services
+
+1. Memory Management
+   - Physical Memory Manager (bitmap/buddy)
+   - Virtual Memory (paging)
+   - Heap allocation (malloc/free)
+
+2. Process Management
+   - Task State Segment (TSS)
+   - Context switching
+   - Scheduling algorithms
+
+3. Device Drivers
+   - Programmable Interrupt Controller (8259A)
+   - Programmable Interval Timer (8253/8254)
+   - PS/2 Keyboard
+   - VGA Text Mode
+
+PHASE 5: OPTIMIZATION & DEBUGGING
+A. Performance
+
+1. Pipeline considerations
+   - Instruction pairing
+   - Branch prediction
+
+2. Memory optimization
+   - Cache alignment
+   - Prefetching
+
+3. SIMD Introduction
+   - MMX, SSE basics
+
+B. Debugging Techniques
+
+1. Debugging with GDB
+   - Setting breakpoints
+   - Examining registers/memory
+   - Single-stepping
+
+2. QEMU debugging
+   - Monitor commands
+   - Remote GDB debugging
+
+3. Diagnostic Output
+   - Serial port debugging
+   - Bochs magic breakpoint
+
+PHASE 6: BUILDING YOUR OS
+A. Core Components
+
+1. Minimal Bootable Kernel
+   - Bootloader + kernel image
+   - Basic video output
+   - Keyboard input
+
+2. Memory Manager Complete
+   - Physical allocation
+   - Virtual memory with paging
+   - Kernel heap
+
+3. Process & Threads
+   - Basic multitasking
+   - System calls interface
+   - User mode separation
+
+B. File System
+
+1. FAT32 Basics
+   - Reading directories
+   - Loading files
+   - Basic write operations
+
+2. Device Abstraction
+   - Block device interface
+   - Character device interface
+
+C. User Space
+
+1. Shell Implementation
+   - Command parsing
+   - Basic builtins (ls, cat, echo)
+
+2. Simple Programs
+   - Hello World in user mode
+   - System call library
+
+Essential References:
+
+1. Intel Manuals (Vol 1, 2A, 2B, 2C, 3A, 3B)
+2. OSDev Wiki (wiki.osdev.org)
+3. NASM Manual
+4. System V ABI
+
+Practice Projects (Increasing Difficulty):
+
+1. Boot sector that prints message
+2. Protected mode switch + C kernel
+3. Basic interrupt handling
+4. Keyboard driver
+5. Simple malloc/free
+6. User mode switch
+7. Basic shell
+8. Filesystem driver
+
+Week 1-2: Write boot sector + basic kernel in C
+Week 3-4: Implement GDT/IDT + keyboard driver
+Week 5-6: Memory manager + paging
+Week 7-8: User mode + system calls
+Week 9-10: Simple shell + basic programs
+Week 11-12: Filesystem + multiple processes
+
+Always use a cross-compiler for OS development
+QEMU is your best friend for testing
+Read the fucking manuals (Intel manuals are essential)
+One component at a time - don't jump ahead
+Version control everything (git)
+Debug early, debug often
+The OSDev community is invaluable

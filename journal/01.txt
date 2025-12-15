@@ -41,11 +41,6 @@ Note* here its about addressable memory not installed ram
     For x86: Build for x86-64/Long Mode (not 32-bit protected mode)
     For RISC-V: Build for RV64GC (64-bit base with extensions)
 
-- xv6 kernel has 2 implementation
-    x86
-    RISC-V(64bit)
-
 - im going for 64 bit X86 for unknown and biased reason
-- next xv6
 
 end!

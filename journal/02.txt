@@ -5,15 +5,14 @@ Goal:
     - some coding 
 
 Dev enviroment 
-- unix like os      // linux or mac
+- an unix os
 - gcc or clang      // c compiler
 - nasm or fasm      // assmebler
 - ld                // linker
 - qemu or bochs     // emulator (bochs has a better debugger)
+- vnc               // if using qemu-base
 - dd,fdisk
 - hex editor
-- xorriso           // creating iso image
-- grub              // bootloader
 
 - Idk how many of the above thing are going to be used,
 - as u know its a mf*n journal
@@ -72,42 +71,18 @@ dw 0xAA55
 bash:
 $ nasm -f bin boot.asm -o boot.bin
 
-bits 16
-- tells the assembler to generate 16-bit code in real mode 
-- real mode (which is where BIOS loads boot sectors), 
-- the processor operates in 16-bit mode
-- All registers are 16-bit (AX, BX, CX, DX, SI, DI, etc.)
-- Memory addresses are limited to 1MB (20-bit addressing via segment:offset)
-
-org 0x7c00
-- tells the assembler where in memory this code will be loaded
-- The BIOS always loads boot sectors to address 0x7c00 in RAM
-- All address calculations in the code will be offset from this base address
-- Without this, label addresses (like hello) would be calculated incorrectly
-
-times 510 - ($ - $$) db 0
-- $ = current position in the output
-- $$ = start of the section (0 for boot sectors)
-- $ - $$ = bytes written so far
-- 510 - ($ - $$) = bytes needed to reach position 510
-- Fills remaining space with zeros (0x00 bytes)
-
-dw 0xAA55
-- Boot signature (magic number) at bytes 511-512
-- BIOS checks for these two bytes to identify a valid boot sector
-- Must be exactly: 0x55 0xAA (in little-endian order)
-- dw 0xAA55 assembles as: byte 511 = 0x55, byte 512 = 0xAA
-
-Little-Endian Explanation
-- dw 0xAA55 means "define word" (16-bit value)
-- In memory (little-endian x86): lower byte first
-     Address 511: 0x55
-     Address 512: 0xAA
-- When read as a 16-bit word at address 511: 0xAA55
-
 * BIOS loads 512 bytes from boot device to 0x7c00
 * BIOS checks last 2 bytes = 0x55AA (as a 16-bit word)
 * BIOS jumps to 0x7c00 (start of your code)
 * Your code clears screen (int 0x10, function 0x03)
 * Prints "hello world!" character by character
 * Infinite loop (no halt instruction shown, would typically hang or loop)
+
+> learn x86 asm which is pretty easy !! (bad humour)
+> today was a more of a strugling day 
+> i was using dwm and qemu didnt work there 
+> half of the day went to figuring what to do
+> so i have to switch to hyprland and it worked idk how
+> moslty from now i think it will be asm 
+> so quickly learn asm x86 
+    (and why does assebly sound like some cement brand) ~mousamm

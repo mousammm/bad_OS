@@ -1,0 +1,8 @@
+
+RESOURCES:
+
+- operating system in 1000 lines
+https://operating-system-in-1000-lines.vercel.app/en/
+
+- the xv6 kernal yt plalist @hpp3
+https://www.youtube.com/playlist?list=PLbtzT1TYeoMhTPzyTZboW_j7TPAnjv9XB

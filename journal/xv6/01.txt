@@ -1,0 +1,22 @@
+FEATURES OF xv6 Kernal
+- process
+- virtual address spaces (process run in their own VAS)
+    page tables // for each VAS
+- files / dir
+- pipes
+- multitusking
+    time-slicing
+- 21 system calls
+
+user programs
+sh,cat,echo,grep,kill,ln,ls,mkdir,rm,wc
+
+MISSING?
+- userid,login
+- no file protection
+- no mount fs
+- paging to disk
+- sockets support for network
+- interprocess communication
+- 2 device drivers
+- linited user code/apps

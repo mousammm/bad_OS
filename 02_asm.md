@@ -1,5 +1,6 @@
 ## x86 architecture
 
+```txt
 |-CPU 
 |  |-ALU
 |  |-ControlUnit
@@ -7,6 +8,7 @@
 |  |-register
 |-MEMORY (RAM/SSD/HARD_DRIVE)
 |-I/O devices (KEYBOARD/MOUSE)
+```
 
 BUSES: Allows to communicate with different pieces of Hardware
 Control Bus
@@ -17,8 +19,8 @@ Address Bus
     ^ Carries operation ADD,AND,OR,NOT,etc
 * Memory Register(fastest way to access data)
 * CPU clock
-    ^ synchronized cpu and bus 
-    ^ 1 ghx = 1billion times per second
+    | synchronized cpu and bus 
+    | 1 ghx = 1billion times per second
 * Control Unit
     ^ uses a binary decoder to convert coded instruction into timing and control signals
     ^ direct the operation of other units(ALU,memory,I/O)

@@ -1,3 +1,0 @@
-
-// TODO 
-explain bootloader real mode 16bit

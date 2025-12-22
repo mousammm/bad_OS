@@ -1,13 +1,14 @@
-all:
-	nasm -f bin src/boot.asm -o bin/boot.bin
+ASM=nasm
 
-clean:
-	rm bin/boot.bin
+SRC_DIR=src
+BUILD_DIR=build
 
-kill: 
-	pkill -f "qemu.*-vnc.*:1" || true
+$(BUILD_DIR)/main.img: $(BUILD_DIR)/main.bin
+	cp $(BUILD_DIR)/main.bin $(BUILD_DIR)/main.img
+	truncate -s 1440k $(BUILD_DIR)/main.img
+
+$(BUILD_DIR)/main.bin: $(SRC_DIR)/main.s
+	$(ASM) $(SRC_DIR)/main.s -f bin -o $(BUILD_DIR)/main.bin
 
 run:
-	qemu-system-x86_64 -drive format=raw,file=bin/boot.bin -vnc :1 &
-	sleep 2
-	vncviewer localhost:5901
+	qemu-system-i386 -fda $(BUILD_DIR)/main.img

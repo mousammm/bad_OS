@@ -50,3 +50,39 @@
     * Level-1 cache is stored on the CPU
     * Level-2 cache is stored outside and accessed by high-speed data bus
 * constructed using static ram, which does not need to be refreshed constantly
+
+## Modes of operation
+
+* **Protected Mode**: Native processor mode 
+    * Multiple processes can be run 
+    * Each given their own section of memory
+    * They cant interact with different processes
+* **Real Address Mode**: access directly hardware 
+* **System Management Mode**: build more specific to the processor
+
+## Registers
+
+* x86 is a 32bit processor each register is 32bits in size
+* 32bit: eax,ebx,ecx,edx
+* 16bit: ax,bx,cx,dx
+* 8bit: ah,bh,ch,dh
+* 8bit: al,bl,cl,dl
+
+* eax: auto used by multiply, division
+* ebx: general purpose
+* ecx: used as a loop counter by the cpu
+* edx: general purpose
+* esi: high speed memory transfer
+* edi: high speed memory transfer
+* ebp: reference function parameters and local variables on the stack
+* esp: pointer to the current stack address
+
+* eip: pointer the next instruction
+* eflags: denotes the status of an operation
+ * CF (carry flag)
+ * OF (overflow flag)
+ * SF (sign flag)
+ * ZF (zero flag)
+ * AC (auxiliary carry)
+ * PF (parity flag)
+

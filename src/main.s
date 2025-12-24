@@ -54,7 +54,7 @@ done_print:
     pop si
     ret     ; return to line 40
 
-os_boot_msg: db 'BAD_OS! has booted', 0x0D, 0x0A, 0
+os_boot_msg: db 'OS has booted', 0x0D, 0x0A, 0
 
 times 510-($-$$) db 0
 dw 0xAA55

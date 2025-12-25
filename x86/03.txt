@@ -13,15 +13,6 @@
 
  2; setting the cross compiler
 pacman:
-sudo pacman -S base-devel
-sudo pacman -S bison
-sudo pacman -S flex
-sudo pacman -S gmp
-sudo pacman -S libmpc
-sudo pacman -S mpfr
-sudo pacman -S texinfo
-sudo pacman -S isl
-or
 sudo pacman -S base-devel bison flex gmp libmpc mpfr texinfo isl
 
 =========================================
@@ -74,5 +65,3 @@ make install-target-libgcc
 
 =========================================
 $HOME/opt/cross/bin/$TARGET-gcc --version
-
-

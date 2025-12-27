@@ -1,0 +1,41 @@
+bits 16
+org 0x7c00
+
+main:
+    cli             ; Clear interrupts to set up segments safely
+    ; set up stack segments and pointer (grows dowmward)
+    xor ax, ax      ; more efficient than mov ax, 0
+    mov ds, ax      ; Data segment = 0
+    mov es, ax      ; Extra segement = 0
+    mov ss, ax      ; Stack segment = 0
+    mov sp, 0x7c00  ; Stack pointer starts just below bootloader
+    sti             ; Re-enable interrupts
+
+    ; Print initial messgae
+    mov si, msg_loading
+    call print_msg
+
+    hlt
+
+halt:
+    jmp halt
+
+; ==================== PRINT ROUTINE ================
+print_msg:
+    pusha
+    mov ah, 0x0E    ; Bios teletype fun
+.print_char:
+    lodsb           ; load byte from [si] into al
+    test al, al
+    jz .done        ; zero bytes means end of string
+    int 0x10        ; print character
+    jmp .print_char
+.done:
+    popa
+    ret
+
+; ==================== DATA ================
+msg_loading: db 'Bootloader loaded at 0x7c00', 0x0D, 0x0A, 0
+
+times 510-($-$$) db 0
+dw 0xaa55
